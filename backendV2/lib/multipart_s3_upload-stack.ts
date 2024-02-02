@@ -39,10 +39,10 @@ export class MultipartS3UploadStack extends cdk.Stack {
         ],
         exposedHeaders: ['ETag'],
       }],
-      removalPolicy: cdk.RemovalPolicy.DESTROY
+      removalPolicy: cdk.RemovalPolicy.RETAIN
     });
 
-    const whitelistedIps = [cdk.Stack.of(this).node.tryGetContext('whitelistip')]
+    // const whitelistedIps = [cdk.Stack.of(this).node.tryGetContext('whitelistip')]
 
     const apiResourcePolicy = new iam.PolicyDocument({
       statements: [
@@ -51,17 +51,17 @@ export class MultipartS3UploadStack extends cdk.Stack {
           principals: [new iam.AnyPrincipal()],
           resources: ['execute-api:/*/*/*'],
         }),
-        new iam.PolicyStatement({
-          effect: iam.Effect.DENY,
-          principals: [new iam.AnyPrincipal()],
-          actions: ['execute-api:Invoke'],
-          resources: ['execute-api:/*/*/*'],
-          conditions: {
-            'NotIpAddress': {
-              "aws:SourceIp": whitelistedIps
-            }
-          }
-        })
+        // new iam.PolicyStatement({
+        //   effect: iam.Effect.DENY,
+        //   principals: [new iam.AnyPrincipal()],
+        //   actions: ['execute-api:Invoke'],
+        //   resources: ['execute-api:/*/*/*'],
+        //   conditions: {
+        //     'NotIpAddress': {
+        //       "aws:SourceIp": whitelistedIps
+        //     }
+        //   }
+        // })
       ]
     })
 
